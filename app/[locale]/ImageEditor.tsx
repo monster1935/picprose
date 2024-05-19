@@ -24,18 +24,18 @@ export const ImageEditor = (props) => {
     return props.message.url
       ? props.message
       : {
-          url: "stacked-waves.svg",
-          name: "PicProse",
-          avatar: "default-author.jpg",
-          profile: "default",
-          downloadLink: "",
-        };
+        url: "stacked-waves.svg",
+        name: "PicProse",
+        avatar: "default-author.jpg",
+        profile: "default",
+        downloadLink: "",
+      };
   };
 
   const [isLoading, setIsLoading] = React.useState(false);
 
   React.useEffect(() => {
-    if(props.message.url != null) {
+    if (props.message.url != null) {
       setIsLoading(true);
     }
   }, [props.message.url]);
@@ -116,7 +116,7 @@ export const ImageEditor = (props) => {
             >
               <h1
                 className={
-                  " leading-tight text-center text-5xl font-bold  text-white " +
+                  " leading-tight text-center text-[30px] font-bold  text-white " +
                   font
                 }
               >
@@ -125,7 +125,7 @@ export const ImageEditor = (props) => {
               <div className="flex flex-col items-center pt-10  ">
                 <h2
                   className={
-                    "text-xl font-semibold text-left text-white " + font
+                    "text-[18px] font-semibold text-left text-white " + font
                   }
                 >
                   {getAuthor()}
