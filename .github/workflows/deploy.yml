@@ -40,7 +40,7 @@ jobs:
       # 5. 打包构建产物（仅运行所需文件）
       - name: Package artifacts
         run: |
-          tar -czf deploy.tar.gz \
+          tar --exclude='.next/cache' -czf deploy.tar.gz \
             .next \
             public \
             package.json \
@@ -50,6 +50,7 @@ jobs:
             middleware.ts \
             locales \
             tsconfig.json
+          ls -lh deploy.tar.gz
 
       # 6. 配置 SSH
       - name: Configure SSH
