@@ -23,9 +23,6 @@ import {
   Image,
   Navbar,
   NavbarBrand,
-  NavbarContent,
-  NavbarItem,
-  Link,
   Button,
   Dropdown,
   DropdownMenu,
@@ -283,23 +280,6 @@ export const RightPropertyPanel = (props) => {
           <NavbarBrand>
             <p className="text-gray-350 font-bold text-inherit">{t("property")}</p>
           </NavbarBrand>
-
-          <NavbarContent justify="end">
-            <NavbarItem>
-              <Button
-                as={Link}
-                color="primary"
-                variant="flat"
-                target="_blank"
-                href="https://github.com/gezhaoyou/picprose"
-              >
-                <i
-                  className={`devicon-github-plain text-[#2F6EE7] dev-icon text-xl`}
-                />
-                GitHub
-              </Button>
-            </NavbarItem>
-          </NavbarContent>
         </Navbar>
       </div>
       <div className="flex-grow overflow-y-scroll overflow-x-hidden justify-center flex flex-wrap px-4">
