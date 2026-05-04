@@ -51,22 +51,35 @@ jobs:
             locales \
             tsconfig.json
 
-      # 6. 通过 SCP 上传到服务器
-      - name: Upload to server via SCP
-        uses: appleboy/scp-action@v0.1.7
-        timeout-minutes: 5
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USERNAME }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: ${{ secrets.SSH_PORT || 22 }}
-          source: "deploy.tar.gz"
-          target: ${{ env.REMOTE_DIR }}
-          timeout: 60s
-          command_timeout: 5m
-          debug: true
+      # 6. 配置 SSH
+      - name: Configure SSH
+        run: |
+          mkdir -p ~/.ssh
+          printf '%s\n' "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          timeout 30s ssh-keyscan -p "${{ secrets.SSH_PORT || 22 }}" -H "${{ secrets.SSH_HOST }}" >> ~/.ssh/known_hosts
 
-      # 7. SSH 远程部署：解包、安装生产依赖、PM2 重启
+      # 7. 通过 rsync 上传到服务器
+      - name: Upload to server via rsync
+        timeout-minutes: 5
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_USERNAME: ${{ secrets.SSH_USERNAME }}
+          SSH_PORT: ${{ secrets.SSH_PORT || 22 }}
+        run: |
+          set -e
+          ssh -i ~/.ssh/deploy_key -p "$SSH_PORT" \
+            -o BatchMode=yes \
+            -o StrictHostKeyChecking=yes \
+            -o ConnectTimeout=30 \
+            "$SSH_USERNAME@$SSH_HOST" "mkdir -p '${{ env.REMOTE_DIR }}'"
+
+          rsync -az --partial --timeout=60 --info=progress2 \
+            -e "ssh -i ~/.ssh/deploy_key -p $SSH_PORT -o BatchMode=yes -o StrictHostKeyChecking=yes -o ConnectTimeout=30" \
+            deploy.tar.gz \
+            "$SSH_USERNAME@$SSH_HOST:${{ env.REMOTE_DIR }}/deploy.tar.gz"
+
+      # 8. SSH 远程部署：解包、安装生产依赖、PM2 重启
       - name: Deploy & restart with PM2
         uses: appleboy/ssh-action@v1.0.3
         timeout-minutes: 10
