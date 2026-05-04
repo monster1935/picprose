@@ -81,21 +81,23 @@ jobs:
 
       # 8. SSH 远程部署：解包、安装生产依赖、PM2 重启
       - name: Deploy & restart with PM2
-        uses: appleboy/ssh-action@v1.0.3
         timeout-minutes: 10
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USERNAME }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: ${{ secrets.SSH_PORT || 22 }}
-          timeout: 60s
-          command_timeout: 10m
-          script: |
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_USERNAME: ${{ secrets.SSH_USERNAME }}
+          SSH_PORT: ${{ secrets.SSH_PORT || 22 }}
+        run: |
+          ssh -i ~/.ssh/deploy_key -p "$SSH_PORT" \
+            -o BatchMode=yes \
+            -o StrictHostKeyChecking=yes \
+            -o ConnectTimeout=30 \
+            "$SSH_USERNAME@$SSH_HOST" \
+            "REMOTE_DIR='${{ env.REMOTE_DIR }}' PM2_APP_NAME='${{ env.PM2_APP_NAME }}' bash -s" <<'EOF'
             set -e
             export NVM_DIR="$HOME/.nvm"
             [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 
-            cd ${{ env.REMOTE_DIR }}
+            cd "$REMOTE_DIR"
 
             # 备份上一次构建（可选）
             rm -rf .next.bak
@@ -109,10 +111,11 @@ jobs:
             npm ci --omit=dev
 
             # 启动 / 重启 PM2 进程
-            if pm2 describe ${{ env.PM2_APP_NAME }} > /dev/null 2>&1; then
-              pm2 reload ${{ env.PM2_APP_NAME }} --update-env
+            if pm2 describe "$PM2_APP_NAME" > /dev/null 2>&1; then
+              pm2 reload "$PM2_APP_NAME" --update-env
             else
-              PORT=3000 pm2 start npm --name ${{ env.PM2_APP_NAME }} -- run start
+              PORT=3000 pm2 start npm --name "$PM2_APP_NAME" -- run start
             fi
 
             pm2 save
+          EOF
