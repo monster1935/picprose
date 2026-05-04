@@ -54,6 +54,7 @@ jobs:
       # 6. 通过 SCP 上传到服务器
       - name: Upload to server via SCP
         uses: appleboy/scp-action@v0.1.7
+        timeout-minutes: 5
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
@@ -61,15 +62,21 @@ jobs:
           port: ${{ secrets.SSH_PORT || 22 }}
           source: "deploy.tar.gz"
           target: ${{ env.REMOTE_DIR }}
+          timeout: 60s
+          command_timeout: 5m
+          debug: true
 
       # 7. SSH 远程部署：解包、安装生产依赖、PM2 重启
       - name: Deploy & restart with PM2
         uses: appleboy/ssh-action@v1.0.3
+        timeout-minutes: 10
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT || 22 }}
+          timeout: 60s
+          command_timeout: 10m
           script: |
             set -e
             export NVM_DIR="$HOME/.nvm"
