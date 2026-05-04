@@ -14,7 +14,7 @@ Build locally, upload the deploy package to the server, then restart the app wit
 npm ci
 npm run build
 
-tar -czf deploy.tar.gz \
+tar --exclude='.next/cache' -czf deploy.tar.gz \
 	.next \
 	public \
 	package.json \

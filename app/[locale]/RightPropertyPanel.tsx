@@ -23,6 +23,7 @@ import {
   Image,
   Navbar,
   NavbarBrand,
+  Link,
   Button,
   Dropdown,
   DropdownMenu,
