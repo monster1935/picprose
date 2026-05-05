@@ -60,3 +60,5 @@ Runtime environment variables should be stored on the server in:
 ```text
 /www/picprose/.env.local
 ```
+
+`NEXT_PUBLIC_*` variables are embedded into the browser bundle during `npm run build`. For GitHub Actions deployments, add `NEXT_PUBLIC_UNSPLASH_API_KEY` to repository Actions secrets so the CI build can include it.

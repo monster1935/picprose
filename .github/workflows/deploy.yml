@@ -36,6 +36,7 @@ jobs:
         run: npm run build
         env:
           NEXT_TELEMETRY_DISABLED: "1"
+          NEXT_PUBLIC_UNSPLASH_API_KEY: ${{ secrets.NEXT_PUBLIC_UNSPLASH_API_KEY }}
 
       # 5. 打包构建产物（仅运行所需文件）
       - name: Package artifacts
