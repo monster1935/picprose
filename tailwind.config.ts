@@ -24,6 +24,7 @@ const config: Config = {
         kingsoft: ["var(--font-kingsoft)"],
         xinyiguanhei: ["var(--font-xinyiguanhei)"],
         alibaba: ["var(--font-alibaba)"],
+        "lxgw-wenkai": ["var(--font-lxgw-wenkai)"],
       },
       aspectRatio: {
         '2/1': '2 / 1',

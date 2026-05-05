@@ -253,6 +253,11 @@ export const RightPropertyPanel = (props) => {
       value: "font-xinyiguanhei",
       description: "The largest land animal",
     },
+    {
+      label: "Font-LXGW WenKai",
+      value: "font-lxgw-wenkai",
+      description: "Custom font",
+    },
   ];
 
   const backStyle = {
@@ -380,7 +385,7 @@ export const RightPropertyPanel = (props) => {
           label={t("font")}
           className="max-w-xs py-2"
           onChange={onFontSelectChange}
-          defaultSelectedKeys={["font-anke"]}
+          defaultSelectedKeys={[config.font]}
         >
           {font_list.map((font) => (
             <SelectItem key={font.value} value={font.value}>

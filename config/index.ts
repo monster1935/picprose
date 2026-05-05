@@ -11,7 +11,7 @@ export const config = {
   ],
   subTitle: "",
   author: "@monster1935",
-  font: "font-anke",
+  font: "font-lxgw-wenkai",
   icon: "",
   backColor: "#1F2937",
   backBlurLevel: 60,

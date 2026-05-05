@@ -30,6 +30,16 @@ const alibabaFont = localFont({
   display: 'swap',
   variable: '--font-alibaba',
 })
+
+const lxgwWenKaiFont = localFont({
+  src: [
+    { path: 'fonts/LXGWWenKaiMonoTC-Light.ttf', weight: '300', style: 'normal' },
+    { path: 'fonts/LXGWWenKaiMonoTC-Regular.ttf', weight: '400', style: 'normal' },
+    { path: 'fonts/LXGWWenKaiMonoTC-Medium.ttf', weight: '500', style: 'normal' },
+  ],
+  display: 'swap',
+  variable: '--font-lxgw-wenkai',
+})
  
 const openSans = Open_Sans({
   subsets: ['latin'],
@@ -69,7 +79,7 @@ export default function RootLayout({
 
   const messages = useMessages();
   return (
-    <html lang="en" className={`${openSans.variable} ${robotoMono.variable} ${ankeLatin.variable} ${dingTalkFont.variable} ${kingsoftFont.variable} ${xinYiGuanHeiFont.variable} ${alibabaFont.variable} font-sans light`}>
+    <html lang="en" className={`${openSans.variable} ${robotoMono.variable} ${ankeLatin.variable} ${dingTalkFont.variable} ${kingsoftFont.variable} ${xinYiGuanHeiFont.variable} ${alibabaFont.variable} ${lxgwWenKaiFont.variable} font-sans light`}>
       <head>
         <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png"/>
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png"/>
