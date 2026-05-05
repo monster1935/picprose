@@ -100,6 +100,14 @@ jobs:
 
             cd "$REMOTE_DIR"
 
+            # 保护服务器运行时环境变量文件
+            ENV_BACKUP="/tmp/${PM2_APP_NAME}.env.local.$$"
+            if [ -f ".env.local" ]; then
+              cp .env.local "$ENV_BACKUP"
+            else
+              echo "Warning: .env.local does not exist in $REMOTE_DIR"
+            fi
+
             # 备份上一次构建（可选）
             rm -rf .next.bak
             [ -d ".next" ] && mv .next .next.bak || true
@@ -107,6 +115,11 @@ jobs:
             # 解压新构建
             tar -xzf deploy.tar.gz
             rm -f deploy.tar.gz
+
+            # 恢复服务器运行时环境变量文件
+            if [ -f "$ENV_BACKUP" ]; then
+              mv "$ENV_BACKUP" .env.local
+            fi
 
             # 安装生产依赖
             npm ci --omit=dev

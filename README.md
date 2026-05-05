@@ -37,8 +37,12 @@ Upload `deploy.tar.gz` to the server deployment directory:
 ```bash
 cd /www/picprose
 
+cp .env.local /tmp/picprose.env.local.bak 2>/dev/null || true
+
 tar -xzf deploy.tar.gz
 rm -f deploy.tar.gz
+
+mv /tmp/picprose.env.local.bak .env.local 2>/dev/null || true
 
 npm ci --omit=dev
 
